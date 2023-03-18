@@ -1,0 +1,209 @@
+(DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
+
+(FILECREATED "19-Feb-2023 03:06:09" {DSK}<home>medley>il>STRINGSCOPE.;35 11225  
+
+      :CHANGES-TO (FNS STRINGSCOPE)
+
+      :PREVIOUS-DATE "18-Feb-2023 10:28:37" {DSK}<home>medley>il>STRINGSCOPE.;34)
+
+
+(PRETTYCOMPRINT STRINGSCOPECOMS)
+
+(RPAQQ STRINGSCOPECOMS ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS LIST.STRINGS 
+                             PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW STRINGS STRINGSCOPE)
+                        (VARS)
+                        (INITVARS (SSCOPE.MIN.LEN 4))
+                        (COMMANDS STRINGS)
+                        (FUNCTIONS WITH.INPUT.FILE)))
+(DEFINEQ
+
+(APPEND.CHAR
+  [LAMBDA (STRING CODE)                                      (* ; "Edited 25-Jan-2023 09:48 by PA")
+
+         (* Return a copy of STRING with the character of code CODE appended to the end.)
+
+    (CONCAT STRING (CHARACTER CODE])
+
+(ATLEASTNCHRSP
+  [LAMBDA (STRING MIN.LEN)                                   (* ; "Edited 29-Jan-2023 11:25 by PA")
+                                                             (* ; "Edited 25-Jan-2023 09:37 by PA")
+                                                             (* Return STRING if it has a length of 
+                                                             at least MIN.LEN characters, NIL 
+                                                             otherwise.)
+    (AND (STRINGP STRING)
+         (SMALLP MIN.LEN)
+         (IGEQ (NCHARS STRING)
+               MIN.LEN])
+
+(CREATE.SSWINDOW
+  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited 27-Jan-2023 10:55 by PA")
+                                                             (* ; "Edited 26-Jan-2023 10:48 by PA")
+
+         (* Create and return a window containing the output of Stringscope.
+         Based on an example in IRM.)
+
+    (PROG (WINDOW)
+          (SETQ WINDOW (CREATEW NIL (CONCAT "Stringscope " (MKSTRING FILE)
+                                           " Min: " MIN.LENGTH)))
+          (WINDOWPROP WINDOW 'FILE FILE)
+          (WINDOWPROP WINDOW 'STRINGS STRINGS)
+          (WINDOWPROP WINDOW 'MIN.LENGTH MIN.LENGTH)
+          (WINDOWPROP WINDOW 'REPAINTFN (FUNCTION REPAINT.SSWINDOW))
+          (WINDOWPROP WINDOW 'RESHAPEFN (FUNCTION RESHAPE.SSWINDOW))
+          (WINDOWPROP WINDOW 'SCROLLFN (FUNCTION SCROLLBYREPAINTFN))
+          (RESHAPE.SSWINDOW WINDOW)
+          (RETURN WINDOW])
+
+(EXTRACT.STRINGS
+  [LAMBDA (STREAM MIN.CHARS)                                 (* ; "Edited 29-Jan-2023 10:25 by PA")
+                                                             (* ; "Edited 27-Jan-2023 10:12 by PA")
+                                                             (* ; "Edited 25-Jan-2023 09:43 by PA")
+                                                             (* ; "Edited 22-Jan-2023 10:19 by PA")
+                                                             (* ; "Edited 19-Jan-2023 10:28 by PA")
+
+         (* Return a list of the printable strings in STREAM in the same order in which 
+         they appear. The strings must be at least SSCOPE.MIN.LEN characters in length.)
+
+    (PROG (MIN.LENGTH (STATE 'BINARY)
+                 (CODE 0)
+                 (BUFFER "")
+                 (STRINGS NIL))                              (* State machine that matches 
+                                                             printable strings.)
+          (SETQ MIN.LENGTH (OR MIN.CHARS SSCOPE.MIN.LEN))
+          (do (SETQ CODE (BIN STREAM))
+              (SELECTQ STATE
+                  (BINARY (if (PRINTABLEP CODE)
+                              then (SETQ BUFFER (APPEND.CHAR BUFFER CODE))
+                                   (SETQ STATE 'MAYBE.STRING)))
+                  (MAYBE.STRING (if (PRINTABLEP CODE)
+                                    then (SETQ BUFFER (APPEND.CHAR BUFFER CODE))
+                                         (if (ATLEASTNCHRSP BUFFER MIN.LENGTH)
+                                             then (SETQ STATE 'STRING))
+                                  else (SETQ BUFFER "")
+                                       (SETQ STATE 'BINARY)))
+                  (STRING (if (PRINTABLEP CODE)
+                              then (SETQ BUFFER (APPEND.CHAR BUFFER CODE))
+                            else (SETQ STRINGS (CONS BUFFER STRINGS))
+                                 (SETQ BUFFER "")
+                                 (SETQ STATE 'BINARY)))
+                  (ERROR STATE "unknown State Machine state")) while (NOT (EOFP STREAM)))
+
+         (* The state machine doesn't handle the case of a printable string that ends at 
+         the end of the file, so check if this is the case.)
+
+          (if (ATLEASTNCHRSP BUFFER MIN.LENGTH)
+              then (SETQ STRINGS (CONS BUFFER STRINGS)))
+          (RETURN (DREVERSE STRINGS])
+
+(LIST.STRINGS
+  [LAMBDA (STRINGS STREAM)                                   (* ; "Edited 22-Jan-2023 10:29 by PA")
+
+         (* Print to STREAM a report with a list of the strings in the STRINGS list.)
+
+    (for STR in STRINGS do (PRIN1 STR STREAM)
+                           (TERPRI STREAM])
+
+(PRINTABLEP
+  [LAMBDA (CHARCODE)                                         (* ; "Edited 21-Jan-2023 07:12 by PA")
+                                                             (* ; "Edited 19-Jan-2023 10:00 by PA")
+                                                             (* Return T if CHARCODE is a printable 
+                                                             ASCII code between SPACE and ~.)
+                                                             (* ; "Edited 18-Jan-2023 11:52 by PA")
+    (AND (SMALLP CHARCODE)
+         (IGEQ CHARCODE 32)
+         (ILEQ CHARCODE 127])
+
+(REPAINT.SSWINDOW
+  [LAMBDA (WINDOW REGION)                                    (* ; "Edited 29-Jan-2023 11:27 by PA")
+                                                             (* ; "Edited 26-Jan-2023 10:26 by PA")
+                                                             (* Repaint the Stringscope window.
+                                                             Based on an example in IRM.)
+    (MOVETO (WINDOWPROP WINDOW 'SSORIGX)
+           (WINDOWPROP WINDOW 'SSORIGY)
+           WINDOW)
+    (LIST.STRINGS (WINDOWPROP WINDOW 'STRINGS)
+           WINDOW])
+
+(RESHAPE.SSWINDOW
+  [LAMBDA (WINDOW)                                           (* ; "Edited 29-Jan-2023 11:28 by PA")
+                                                             (* ; "Edited 26-Jan-2023 10:44 by PA")
+                                                             (* Resize the Stringscope window.
+                                                             Based on an example in IRM.)
+    (PROG (BTM)
+          (DSPRESET WINDOW)
+          (WINDOWPROP WINDOW 'SSORIGX (DSPXPOSITION NIL WINDOW))
+          (WINDOWPROP WINDOW 'SSORIGY (DSPYPOSITION NIL WINDOW))
+          (REPAINT.SSWINDOW WINDOW)
+          (WINDOWPROP WINDOW 'EXTENT (create REGION
+                                            LEFT _ 0
+                                            BOTTOM _ [SETQ BTM (IPLUS (DSPYPOSITION NIL WINDOW)
+                                                                      (FONTPROP WINDOW 'ASCENT]
+                                            WIDTH _ (WINDOWPROP WINDOW 'WIDTH)
+                                            HEIGHT _ (IDIFFERENCE (WINDOWPROP WINDOW 'HEIGHT)
+                                                            BTM])
+
+(STRINGS
+  [LAMBDA (FILE MIN.LENGTH NEWWIN)                           (* ; "Edited 18-Feb-2023 10:21 by PA")
+                                                             (* ; "Edited 17-Feb-2023 09:05 by PA")
+                                                             (* ; "Edited 12-Feb-2023 10:48 by PA")
+
+         (* Lists the printable strings in binary file FILE in a new window if NEWWIN is 
+         T, otherwise prints them to the primary output #.(SEDIT::MAKE-BROKEN-ATOM ".") 
+         The strings must be at least MIN.LENGTH characters in length.
+         Depending on NEWWIN returns the primary output stream or the new window if the 
+         file is processed with no issues, NIL otherwise.)
+
+    (LET [(STRINGS (WITH.INPUT.FILE (STREAM FILE)
+                          (EXTRACT.STRINGS STREAM MIN.LENGTH]
+         (if STRINGS
+             then (if NEWWIN
+                      then (CREATE.SSWINDOW FILE STRINGS (OR MIN.LENGTH SSCOPE.MIN.LEN))
+                    else (LIST.STRINGS STRINGS)
+                         (OUTPUT))
+           else (PROMPTPRINT (CONCAT "No strings in " FILE " or can't open file."))
+                NIL])
+
+(STRINGSCOPE
+  [LAMBDA (FILE MIN.LENGTH)                                  (* ; "Edited 19-Feb-2023 03:05 by PA")
+                                                             (* ; "Edited 17-Feb-2023 10:04 by PA")
+                                                             (* ; "Edited 13-Feb-2023 06:15 by PA")
+                                                             (* ; "Edited 29-Jan-2023 10:25 by PA")
+                                                             (* ; "Edited 27-Jan-2023 10:52 by PA")
+                                                             (* ; "Edited 24-Jan-2023 06:27 by PA")
+                                                             (* ; "Edited 22-Jan-2023 10:46 by PA")
+                                                             (* ; "Edited 19-Jan-2023 10:35 by PA")
+
+         (* Lists in a new window the printable strings in binary file FILE.
+         The strings must be at least MIN.LENGTH characters in length.
+         Returns the new window if the file is processed with no issues, NIL otherwise.)
+
+    (STRINGS FILE MIN.LENGTH T])
+)
+
+(RPAQ? SSCOPE.MIN.LEN 4)
+
+(DEFCOMMAND (STRINGS :EVAL) (FILE &OPTIONAL (MIN.LENGTH SSCOPE.MIN.LEN)) (STRINGS FILE MIN.LENGTH)
+   (CL:VALUES))
+
+(DEFMACRO WITH.INPUT.FILE ((STREAM FILE)
+                           &BODY BODY &AUX (RESULT (GENSYM))
+                           (VALUE (GENSYM)))                 (* ; "Edited 16-Feb-2023 10:50 by PA")
+
+         (* Opens an input stream to FILE and evaluates the forms in BODY with the stream 
+         bound to STREAM. Returns the value of the last form in BODY, or NIL if FILE can 
+         not be opened.)
+                                                             (* ; "Edited 16-Feb-2023 10:38 by PA")
+   `(PROG NIL
+          [SETQ ,RESULT (NLSETQ (OPENSTREAM ,FILE 'INPUT]
+          (if ,RESULT
+              then (SETQ ,STREAM (CAR ,RESULT))
+                   (SETQ ,VALUE (PROGN ,@BODY))
+                   (CLOSEF ,STREAM)
+                   (RETURN ,VALUE)
+            else (RETURN NIL))))
+(DECLARE%: DONTCOPY
+  (FILEMAP (NIL (698 10200 (APPEND.CHAR 708 . 965) (ATLEASTNCHRSP 967 . 1590) (CREATE.SSWINDOW 1592 . 
+2528) (EXTRACT.STRINGS 2530 . 5050) (LIST.STRINGS 5052 . 5371) (PRINTABLEP 5373 . 5996) (
+REPAINT.SSWINDOW 5998 . 6600) (RESHAPE.SSWINDOW 6602 . 7786) (STRINGS 7788 . 9028) (STRINGSCOPE 9030
+ . 10198)) (10356 11202 (WITH.INPUT.FILE 10356 . 11202)))))
+STOP
