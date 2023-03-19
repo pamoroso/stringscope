@@ -4,17 +4,24 @@ Stringscope is a tool to display a list of text the strings contained in a binar
 
 ![Stringscope output window](https://raw.githubusercontent.com/pamoroso/stringscope/main/stringscope.png)
 
-## Usage
 
-First load Stringscope by evaluating:
+## Installation
+
+Download the file `STRINGSCOPE` from the project repo, copy it to a file system your Medley Interlisp installation has access to, and evaluate the following expression from the Lisp executive:
 
 ```lisp
 (FILESLOAD STRINGSCOPE)
 ```
 
+
+## Usage
+
+Once Stringscope is loaded you can call the following functions and commands.
+
+
 ### `STRINGSCOPE`
 
-Next, to run the program evaluate:
+To run the program evaluate:
 
 ```lisp
 (STRINGSCOPE FILENAME MIN.LEN)
