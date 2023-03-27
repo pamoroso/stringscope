@@ -57,8 +57,23 @@ EXTRACT.STRINGS STREAM MIN.LEN
 returns a list of the strings of at least `MIN.LEN` characters read from `STREAM`. The function assumes the input stream is already open.
 
 
+## Release history
+
+See the [list of releases](https://github.com/pamoroso/stringscope/releases) for notes on the changes in each version.
+
+
 ## Learn more
 
 - [Stringscope project updates](https://write.as/paoloamoroso/tag:stringscope)
 - [`strings`](https://en.wikipedia.org/wiki/Strings_(Unix))
 - [Medley Interlisp](https://interlisp.org)
+
+
+## Author
+
+Stringscope is developed by [Paolo Amoroso](https://github.com/pamoroso).
+
+
+## License
+
+This code is distributed under the MIT license, see the `LICENSE` file.
