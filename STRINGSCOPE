@@ -1,16 +1,18 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "19-Feb-2023 03:06:09" {DSK}<home>medley>il>STRINGSCOPE.;35 11225  
+(FILECREATED " 1-Apr-2023 12:07:23" {DSK}<home>medley>il>STRINGSCOPE.;39 13862  
 
-      :CHANGES-TO (FNS STRINGSCOPE)
+      :CHANGES-TO (FNS CREATE.SSWINDOW HANDLE.SSMENU)
+                  (VARS STRINGSCOPECOMS)
 
-      :PREVIOUS-DATE "18-Feb-2023 10:28:37" {DSK}<home>medley>il>STRINGSCOPE.;34)
+      :PREVIOUS-DATE "31-Mar-2023 13:25:14" {DSK}<home>medley>il>STRINGSCOPE.;38)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
 
-(RPAQQ STRINGSCOPECOMS ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS LIST.STRINGS 
-                             PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW STRINGS STRINGSCOPE)
+(RPAQQ STRINGSCOPECOMS ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS HANDLE.SSMENU
+                             LIST.STRINGS PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW STRINGS 
+                             STRINGSCOPE)
                         (VARS)
                         (INITVARS (SSCOPE.MIN.LEN 4))
                         (COMMANDS STRINGS)
@@ -36,15 +38,36 @@
                MIN.LEN])
 
 (CREATE.SSWINDOW
-  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited 27-Jan-2023 10:55 by PA")
+  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited  1-Apr-2023 12:04 by PA")
+                                                             (* ; "Edited 27-Jan-2023 10:55 by PA")
                                                              (* ; "Edited 26-Jan-2023 10:48 by PA")
 
          (* Create and return a window containing the output of Stringscope.
          Based on an example in IRM.)
 
     (PROG (WINDOW)
-          (SETQ WINDOW (CREATEW NIL (CONCAT "Stringscope " (MKSTRING FILE)
-                                           " Min: " MIN.LENGTH)))
+          (SETQ WINDOW (CREATEMENUEDWINDOW (create MENU
+                                                  ITEMS _ '((Get GET "Open new file")
+                                                            (Find FIND "Search for specific string")
+                                                            (Sort SORT "Sort strings"
+                                                                  (SUBITEMS (Ascending ASCENDING 
+                                                                    "Sort strings in ascending order"
+                                                                                   )
+                                                                         (Descending DESCENDING 
+                                                                   "Sort strings in descending order"
+                                                                                )))
+                                                            ("Set threshold" THRESHOLD 
+                                                                   "Set minimum string length")
+                                                            (Reset RESET 
+                                                        "Redisplay the strings as read from the file"
+                                                                   ))
+                                                  MENUFONT _ '(MODERN 12)
+                                                  TITLE _ "Commands"
+                                                  WHENSELECTEDFN _ (FUNCTION HANDLE.SSMENU))
+                              (CONCAT "Stringscope " (MKSTRING FILE)
+                                     " Min: " MIN.LENGTH)
+                              'RIGHT))
+          (WINDOWPROP WINDOW 'PROMPTAREA (GETPROMPTWINDOW WINDOW))
           (WINDOWPROP WINDOW 'FILE FILE)
           (WINDOWPROP WINDOW 'STRINGS STRINGS)
           (WINDOWPROP WINDOW 'MIN.LENGTH MIN.LENGTH)
@@ -94,6 +117,26 @@
           (if (ATLEASTNCHRSP BUFFER MIN.LENGTH)
               then (SETQ STRINGS (CONS BUFFER STRINGS)))
           (RETURN (DREVERSE STRINGS])
+
+(HANDLE.SSMENU
+  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited  1-Apr-2023 12:04 by PA")
+
+         (* Main menu handler that dispatches based on the selected option and executes 
+         the appropriate command.)
+
+    (PROG NIL
+          (if (OR (EQ KEY 'MIDDLE)
+                  (EQ KEY 'RIGHT))
+              then (RETURN NIL))
+          (SELECTQ (CADR ITEM)
+              (GET (PROMPTPRINT ITEM))
+              (FIND (PROMPTPRINT ITEM))
+              (SORT (PROMPTPRINT ITEM))
+              (ASCENDING (PROMPTPRINT ITEM))
+              (DESCENDING (PROMPTPRINT ITEM))
+              (THRESHOLD (PROMPTPRINT ITEM))
+              (RESET (PROMPTPRINT ITEM))
+              (T (PROMPTPRINT "Unknown menu option"])
 
 (LIST.STRINGS
   [LAMBDA (STRINGS STREAM)                                   (* ; "Edited 22-Jan-2023 10:29 by PA")
@@ -164,7 +207,7 @@
                 NIL])
 
 (STRINGSCOPE
-  [LAMBDA (FILE MIN.LENGTH)                                  (* ; "Edited 19-Feb-2023 03:05 by PA")
+  [LAMBDA (FILE MIN.LENGTH)                                  (* ; "Edited 18-Feb-2023 10:17 by PA")
                                                              (* ; "Edited 17-Feb-2023 10:04 by PA")
                                                              (* ; "Edited 13-Feb-2023 06:15 by PA")
                                                              (* ; "Edited 29-Jan-2023 10:25 by PA")
@@ -202,8 +245,8 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (698 10200 (APPEND.CHAR 708 . 965) (ATLEASTNCHRSP 967 . 1590) (CREATE.SSWINDOW 1592 . 
-2528) (EXTRACT.STRINGS 2530 . 5050) (LIST.STRINGS 5052 . 5371) (PRINTABLEP 5373 . 5996) (
-REPAINT.SSWINDOW 5998 . 6600) (RESHAPE.SSWINDOW 6602 . 7786) (STRINGS 7788 . 9028) (STRINGSCOPE 9030
- . 10198)) (10356 11202 (WITH.INPUT.FILE 10356 . 11202)))))
+  (FILEMAP (NIL (800 12837 (APPEND.CHAR 810 . 1067) (ATLEASTNCHRSP 1069 . 1692) (CREATE.SSWINDOW 1694 . 
+4397) (EXTRACT.STRINGS 4399 . 6919) (HANDLE.SSMENU 6921 . 7687) (LIST.STRINGS 7689 . 8008) (PRINTABLEP
+ 8010 . 8633) (REPAINT.SSWINDOW 8635 . 9237) (RESHAPE.SSWINDOW 9239 . 10423) (STRINGS 10425 . 11665) (
+STRINGSCOPE 11667 . 12835)) (12993 13839 (WITH.INPUT.FILE 12993 . 13839)))))
 STOP
