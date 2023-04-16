@@ -1,10 +1,10 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED " 3-Apr-2023 05:13:52" {DSK}<home>medley>il>STRINGSCOPE.;40 13893  
+(FILECREATED "15-Apr-2023 12:56:58" {DSK}<home>medley>il>STRINGSCOPE.;42 14523  
 
-      :CHANGES-TO (FUNCTIONS WITH.INPUT.FILE)
+      :CHANGES-TO (FNS CREATE.SSWINDOW)
 
-      :PREVIOUS-DATE " 1-Apr-2023 12:07:23" {DSK}<home>medley>il>STRINGSCOPE.;39)
+      :PREVIOUS-DATE "15-Apr-2023 11:38:26" {DSK}<home>medley>il>STRINGSCOPE.;41)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
@@ -37,7 +37,8 @@
                MIN.LEN])
 
 (CREATE.SSWINDOW
-  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited  1-Apr-2023 12:04 by PA")
+  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited 15-Apr-2023 12:56 by PA")
+                                                             (* ; "Edited  1-Apr-2023 12:04 by PA")
                                                              (* ; "Edited 27-Jan-2023 10:55 by PA")
                                                              (* ; "Edited 26-Jan-2023 10:48 by PA")
 
@@ -67,8 +68,13 @@
                                      " Min: " MIN.LENGTH)
                               'RIGHT))
           (WINDOWPROP WINDOW 'PROMPTAREA (GETPROMPTWINDOW WINDOW))
-          (WINDOWPROP WINDOW 'FILE FILE)
-          (WINDOWPROP WINDOW 'STRINGS STRINGS)
+                                                             (* Name of the current file from which 
+                                                             the strings are read.)
+          (WINDOWPROP WINDOW 'FILE FILE)                     (* List of strings read from the 
+                                                             current file.)
+          (WINDOWPROP WINDOW 'STRINGS STRINGS)               (* List of processed strings output by 
+                                                             the latest command.)
+          (WINDOWPROP WINDOW 'STRINGS.CACHE STRINGS)
           (WINDOWPROP WINDOW 'MIN.LENGTH MIN.LENGTH)
           (WINDOWPROP WINDOW 'REPAINTFN (FUNCTION REPAINT.SSWINDOW))
           (WINDOWPROP WINDOW 'RESHAPEFN (FUNCTION RESHAPE.SSWINDOW))
@@ -243,8 +249,8 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (751 12788 (APPEND.CHAR 761 . 1018) (ATLEASTNCHRSP 1020 . 1643) (CREATE.SSWINDOW 1645 . 
-4348) (EXTRACT.STRINGS 4350 . 6870) (HANDLE.SSMENU 6872 . 7638) (LIST.STRINGS 7640 . 7959) (PRINTABLEP
- 7961 . 8584) (REPAINT.SSWINDOW 8586 . 9188) (RESHAPE.SSWINDOW 9190 . 10374) (STRINGS 10376 . 11616) (
-STRINGSCOPE 11618 . 12786)) (12944 13870 (WITH.INPUT.FILE 12944 . 13870)))))
+  (FILEMAP (NIL (745 13418 (APPEND.CHAR 755 . 1012) (ATLEASTNCHRSP 1014 . 1637) (CREATE.SSWINDOW 1639 . 
+4978) (EXTRACT.STRINGS 4980 . 7500) (HANDLE.SSMENU 7502 . 8268) (LIST.STRINGS 8270 . 8589) (PRINTABLEP
+ 8591 . 9214) (REPAINT.SSWINDOW 9216 . 9818) (RESHAPE.SSWINDOW 9820 . 11004) (STRINGS 11006 . 12246) (
+STRINGSCOPE 12248 . 13416)) (13574 14500 (WITH.INPUT.FILE 13574 . 14500)))))
 STOP
