@@ -1,17 +1,17 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "15-Apr-2023 12:56:58" {DSK}<home>medley>il>STRINGSCOPE.;42 14523  
+(FILECREATED "21-Apr-2023 11:26:31" {DSK}<home>medley>il>STRINGSCOPE.;45 15755  
 
-      :CHANGES-TO (FNS CREATE.SSWINDOW)
+      :CHANGES-TO (FNS HANDLE.SSMENU SSCMD.SORT)
 
-      :PREVIOUS-DATE "15-Apr-2023 11:38:26" {DSK}<home>medley>il>STRINGSCOPE.;41)
+      :PREVIOUS-DATE "20-Apr-2023 10:28:29" {DSK}<home>medley>il>STRINGSCOPE.;44)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
 
 (RPAQQ STRINGSCOPECOMS ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS HANDLE.SSMENU
-                             LIST.STRINGS PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW STRINGS 
-                             STRINGSCOPE)
+                             LIST.STRINGS PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW SSCMD.SORT 
+                             STRINGS STRINGSCOPE)
                         (VARS)
                         (INITVARS (SSCOPE.MIN.LEN 4))
                         (COMMANDS STRINGS)
@@ -124,21 +124,25 @@
           (RETURN (DREVERSE STRINGS])
 
 (HANDLE.SSMENU
-  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited  1-Apr-2023 12:04 by PA")
+  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited 21-Apr-2023 11:12 by PA")
+                                                             (* ; "Edited 20-Apr-2023 10:11 by PA")
+                                                             (* ; "Edited  1-Apr-2023 12:04 by PA")
 
          (* Main menu handler that dispatches based on the selected option and executes 
          the appropriate command.)
 
-    (PROG NIL
+    (LET* ((MENU.WINDOW (WFROMMENU MENU))
+           (MAIN.WINDOW (MAINWINDOW WINDOW T)))
           (if (OR (EQ KEY 'MIDDLE)
                   (EQ KEY 'RIGHT))
               then (RETURN NIL))
           (SELECTQ (CADR ITEM)
               (GET (PROMPTPRINT ITEM))
               (FIND (PROMPTPRINT ITEM))
-              (SORT (PROMPTPRINT ITEM))
-              (ASCENDING (PROMPTPRINT ITEM))
-              (DESCENDING (PROMPTPRINT ITEM))
+              (SORT (SSCMD.SORT MAIN.WINDOW))
+              (ASCENDING (SSCMD.SORT MAIN.WINDOW))
+              (DESCENDING [SSCMD.SORT MAIN.WINDOW (FUNCTION (LAMBDA (S1 S2)
+                                                              (ALPHORDER S2 S1])
               (THRESHOLD (PROMPTPRINT ITEM))
               (RESET (PROMPTPRINT ITEM))
               (T (PROMPTPRINT "Unknown menu option"])
@@ -162,14 +166,15 @@
          (ILEQ CHARCODE 127])
 
 (REPAINT.SSWINDOW
-  [LAMBDA (WINDOW REGION)                                    (* ; "Edited 29-Jan-2023 11:27 by PA")
+  [LAMBDA (WINDOW REGION)                                    (* ; "Edited 20-Apr-2023 10:21 by PA")
+                                                             (* ; "Edited 29-Jan-2023 11:27 by PA")
                                                              (* ; "Edited 26-Jan-2023 10:26 by PA")
                                                              (* Repaint the Stringscope window.
                                                              Based on an example in IRM.)
     (MOVETO (WINDOWPROP WINDOW 'SSORIGX)
            (WINDOWPROP WINDOW 'SSORIGY)
            WINDOW)
-    (LIST.STRINGS (WINDOWPROP WINDOW 'STRINGS)
+    (LIST.STRINGS (WINDOWPROP WINDOW 'STRINGS.CACHE)
            WINDOW])
 
 (RESHAPE.SSWINDOW
@@ -189,6 +194,18 @@
                                             WIDTH _ (WINDOWPROP WINDOW 'WIDTH)
                                             HEIGHT _ (IDIFFERENCE (WINDOWPROP WINDOW 'HEIGHT)
                                                             BTM])
+
+(SSCMD.SORT
+  [LAMBDA (WINDOW COMPAREFN)                                 (* ; "Edited 21-Apr-2023 11:23 by PA")
+                                                             (* ; "Edited 20-Apr-2023 10:27 by PA")
+                                                             (* ; "Edited 20-Apr-2023 10:08 by PA")
+
+         (* Sort the list of strings stored in WINDOW using the COMPAREFN comparison 
+         function and update the view.)
+
+    [WINDOWPROP WINDOW 'STRINGS.CACHE (SORT (COPY (WINDOWPROP WINDOW 'STRINGS))
+                                            (OR COMPAREFN (FUNCTION ALPHORDER]
+    (RESHAPE.SSWINDOW WINDOW])
 
 (STRINGS
   [LAMBDA (FILE MIN.LENGTH NEWWIN)                           (* ; "Edited 18-Feb-2023 10:21 by PA")
@@ -249,8 +266,9 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (745 13418 (APPEND.CHAR 755 . 1012) (ATLEASTNCHRSP 1014 . 1637) (CREATE.SSWINDOW 1639 . 
-4978) (EXTRACT.STRINGS 4980 . 7500) (HANDLE.SSMENU 7502 . 8268) (LIST.STRINGS 8270 . 8589) (PRINTABLEP
- 8591 . 9214) (REPAINT.SSWINDOW 9216 . 9818) (RESHAPE.SSWINDOW 9820 . 11004) (STRINGS 11006 . 12246) (
-STRINGSCOPE 12248 . 13416)) (13574 14500 (WITH.INPUT.FILE 13574 . 14500)))))
+  (FILEMAP (NIL (765 14650 (APPEND.CHAR 775 . 1032) (ATLEASTNCHRSP 1034 . 1657) (CREATE.SSWINDOW 1659 . 
+4998) (EXTRACT.STRINGS 5000 . 7520) (HANDLE.SSMENU 7522 . 8715) (LIST.STRINGS 8717 . 9036) (PRINTABLEP
+ 9038 . 9661) (REPAINT.SSWINDOW 9663 . 10379) (RESHAPE.SSWINDOW 10381 . 11565) (SSCMD.SORT 11567 . 
+12236) (STRINGS 12238 . 13478) (STRINGSCOPE 13480 . 14648)) (14806 15732 (WITH.INPUT.FILE 14806 . 
+15732)))))
 STOP
