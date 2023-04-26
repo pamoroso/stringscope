@@ -1,13 +1,12 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "22-Apr-2023 11:43:35" {DSK}<home>medley>il>STRINGSCOPE.;46 16817  
+(FILECREATED "26-Apr-2023 04:43:17" {DSK}<home>medley>il>STRINGSCOPE.;47 16911  
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (FNS CREATE.SSWINDOW HANDLE.SSMENU SSCMD.EXIT SSCMD.RESET)
-                  (VARS STRINGSCOPECOMS)
+      :CHANGES-TO (FNS CREATE.SSWINDOW)
 
-      :PREVIOUS-DATE "21-Apr-2023 11:26:31" {DSK}<home>medley>il>STRINGSCOPE.;45)
+      :PREVIOUS-DATE "22-Apr-2023 11:43:35" {DSK}<home>medley>il>STRINGSCOPE.;46)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
@@ -40,7 +39,8 @@
                MIN.LEN])
 
 (CREATE.SSWINDOW
-  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited 22-Apr-2023 11:38 by PA")
+  [LAMBDA (FILE STRINGS MIN.LENGTH)                          (* ; "Edited 26-Apr-2023 04:42 by PA")
+                                                             (* ; "Edited 22-Apr-2023 11:38 by PA")
                                                              (* ; "Edited 15-Apr-2023 12:56 by PA")
                                                              (* ; "Edited  1-Apr-2023 12:04 by PA")
                                                              (* ; "Edited 27-Jan-2023 10:55 by PA")
@@ -66,6 +66,7 @@
                                                         "Redisplay the strings as read from the file"
                                                                    )
                                                             (Exit EXIT "Quit the program"))
+                                                  CENTERFLG _ T
                                                   MENUFONT _ '(MODERN 12)
                                                   TITLE _ "Commands"
                                                   WHENSELECTEDFN _ (FUNCTION HANDLE.SSMENU))
@@ -287,9 +288,9 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (878 15712 (APPEND.CHAR 888 . 1145) (ATLEASTNCHRSP 1147 . 1770) (CREATE.SSWINDOW 1772 . 
-5310) (EXTRACT.STRINGS 5312 . 7832) (HANDLE.SSMENU 7834 . 9196) (LIST.STRINGS 9198 . 9517) (PRINTABLEP
- 9519 . 10142) (REPAINT.SSWINDOW 10144 . 10860) (RESHAPE.SSWINDOW 10862 . 12046) (SSCMD.EXIT 12048 . 
-12280) (SSCMD.RESET 12282 . 12627) (SSCMD.SORT 12629 . 13298) (STRINGS 13300 . 14540) (STRINGSCOPE 
-14542 . 15710)) (15868 16794 (WITH.INPUT.FILE 15868 . 16794)))))
+  (FILEMAP (NIL (800 15806 (APPEND.CHAR 810 . 1067) (ATLEASTNCHRSP 1069 . 1692) (CREATE.SSWINDOW 1694 . 
+5404) (EXTRACT.STRINGS 5406 . 7926) (HANDLE.SSMENU 7928 . 9290) (LIST.STRINGS 9292 . 9611) (PRINTABLEP
+ 9613 . 10236) (REPAINT.SSWINDOW 10238 . 10954) (RESHAPE.SSWINDOW 10956 . 12140) (SSCMD.EXIT 12142 . 
+12374) (SSCMD.RESET 12376 . 12721) (SSCMD.SORT 12723 . 13392) (STRINGS 13394 . 14634) (STRINGSCOPE 
+14636 . 15804)) (15962 16888 (WITH.INPUT.FILE 15962 . 16888)))))
 STOP
