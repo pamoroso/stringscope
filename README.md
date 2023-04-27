@@ -27,7 +27,20 @@ To run the program evaluate:
 (STRINGSCOPE FILENAME MIN.LEN)
 ```
 
-where `FILENAME` is a file name and `MIN.LEN` the optional minimum length printable character sequences must have. The default is 4 characters but is user-configurable by changing the global variable `SSCOPE.MIN.LEN`. `STRINGSCOPE` prompts to create a window to display the output, which is scrollable. The function returns the new window if the file is processed with no issues, `NIL` otherwise.
+where `FILENAME` is a file name and `MIN.LEN` the optional minimum length printable character sequences must have. The default is 4 characters but is user-configurable by changing the global variable `SSCOPE.MIN.LEN`. 
+
+`STRINGSCOPE` prompts to create a window to display the output, which is scrollable. The output window has a prompt area attached to the top side and a menu to the right side. The prompt area serves for requesting input and displaying status messages, the menu contains the following items and subitems:
+
+- `Get`: reads the strings of a new file
+- `Find`: searches for strings matching a specific text
+- `Sort`: sorts the strings in the following order
+  * `Ascending`
+  * `Descending`
+- `Min Len`: changes the minimum length strings must have
+- `Reset`: redisplays the strings read from the current file
+- `Exit`: quits the program
+
+The function returns the output window if the file is processed with no issues, `NIL` otherwise.
 
 
 ### `STRINGS`
