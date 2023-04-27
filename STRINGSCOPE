@@ -1,23 +1,24 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "27-Apr-2023 06:30:27" {DSK}<home>medley>il>STRINGSCOPE.;48 17133  
+(FILECREATED "27-Apr-2023 11:37:30" {DSK}<home>medley>il>STRINGSCOPE.;50 18542  
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (FNS CREATE.SSWINDOW HANDLE.SSMENU)
+      :CHANGES-TO (FNS SSCMD.MINLEN)
 
-      :PREVIOUS-DATE "26-Apr-2023 04:43:17" {DSK}<home>medley>il>STRINGSCOPE.;47)
+      :PREVIOUS-DATE "27-Apr-2023 11:05:39" {DSK}<home>medley>il>STRINGSCOPE.;49)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
 
-(RPAQQ STRINGSCOPECOMS ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS HANDLE.SSMENU
-                             LIST.STRINGS PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW SSCMD.EXIT 
-                             SSCMD.RESET SSCMD.SORT STRINGS STRINGSCOPE)
-                        (VARS)
-                        (INITVARS (SSCOPE.MIN.LEN 4))
-                        (COMMANDS STRINGS)
-                        (FUNCTIONS WITH.INPUT.FILE)))
+(RPAQQ STRINGSCOPECOMS
+       ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS HANDLE.SSMENU LIST.STRINGS 
+             PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW SSCMD.EXIT SSCMD.MINLEN SSCMD.RESET 
+             SSCMD.SORT STRINGS STRINGSCOPE)
+        (VARS)
+        (INITVARS (SSCOPE.MIN.LEN 4))
+        (COMMANDS STRINGS)
+        (FUNCTIONS WITH.INPUT.FILE)))
 (DEFINEQ
 
 (APPEND.CHAR
@@ -131,7 +132,7 @@
           (RETURN (DREVERSE STRINGS])
 
 (HANDLE.SSMENU
-  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited 27-Apr-2023 06:29 by PA")
+  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited 27-Apr-2023 10:57 by PA")
                                                              (* ; "Edited 22-Apr-2023 11:41 by PA")
                                                              (* ; "Edited 21-Apr-2023 11:12 by PA")
                                                              (* ; "Edited 20-Apr-2023 10:11 by PA")
@@ -152,7 +153,7 @@
               (ASCENDING (SSCMD.SORT MAIN.WINDOW))
               (DESCENDING [SSCMD.SORT MAIN.WINDOW (FUNCTION (LAMBDA (S1 S2)
                                                               (ALPHORDER S2 S1])
-              (MINLEN (PROMPTPRINT ITEM))
+              (MINLEN (SSCMD.MINLEN MAIN.WINDOW))
               (RESET (SSCMD.RESET MAIN.WINDOW))
               (EXIT (SSCMD.EXIT MAIN.WINDOW))
               (T (PROMPTPRINT "Unknown menu option"])
@@ -209,6 +210,31 @@
   [LAMBDA (WINDOW)                                           (* ; "Edited 22-Apr-2023 11:40 by PA")
                                                              (* Quits the program.)
     (CLOSEW WINDOW])
+
+(SSCMD.MINLEN
+  [LAMBDA (WINDOW)                                           (* ; "Edited 27-Apr-2023 11:36 by PA")
+
+         (* Prompt the user for a minimum length, extract the strings with the new length 
+         from the current file, and refresh the view.)
+
+    (LET* [(STREAM (WINDOWPROP WINDOW 'PROMPTAREA))
+           (CURLEN (WINDOWPROP WINDOW 'MIN.LENGTH))
+           (NEWLEN (PROGN (TERPRI STREAM)
+                          (MKATOM (PROMPTFORWORD "Min Len:" 4 NIL STREAM]
+          (if (AND (SMALLP NEWLEN)
+                   (GREATERP NEWLEN 0))
+              then (AND (NOT (EQ NEWLEN CURLEN))
+                        (WINDOWPROP WINDOW 'MIN.LENGTH NEWLEN)
+                        (LET [(NEWSTRINGS (WITH.INPUT.FILE (STR (WINDOWPROP WINDOW 'FILE))
+                                                 (EXTRACT.STRINGS STR NEWLEN]
+                             (WINDOWPROP WINDOW 'STRINGS NEWSTRINGS)
+                             (WINDOWPROP WINDOW 'STRINGS.CACHE NEWSTRINGS)
+                             (WINDOWPROP WINDOW 'TITLE (CONCAT "Stringscope "
+                                                              (MKSTRING (WINDOWPROP WINDOW
+                                                                               'FILE))
+                                                              " Min Len: " NEWLEN))
+                             (RESHAPE.SSWINDOW WINDOW)))
+            else (PRINTOUT STREAM T "Invalid length" %, NEWLEN])
 
 (SSCMD.RESET
   [LAMBDA (WINDOW)                                           (* ; "Edited 22-Apr-2023 11:35 by PA")
@@ -290,9 +316,9 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (814 16028 (APPEND.CHAR 824 . 1081) (ATLEASTNCHRSP 1083 . 1706) (CREATE.SSWINDOW 1708 . 
-5521) (EXTRACT.STRINGS 5523 . 8043) (HANDLE.SSMENU 8045 . 9512) (LIST.STRINGS 9514 . 9833) (PRINTABLEP
- 9835 . 10458) (REPAINT.SSWINDOW 10460 . 11176) (RESHAPE.SSWINDOW 11178 . 12362) (SSCMD.EXIT 12364 . 
-12596) (SSCMD.RESET 12598 . 12943) (SSCMD.SORT 12945 . 13614) (STRINGS 13616 . 14856) (STRINGSCOPE 
-14858 . 16026)) (16184 17110 (WITH.INPUT.FILE 16184 . 17110)))))
+  (FILEMAP (NIL (722 17437 (APPEND.CHAR 732 . 989) (ATLEASTNCHRSP 991 . 1614) (CREATE.SSWINDOW 1616 . 
+5429) (EXTRACT.STRINGS 5431 . 7951) (HANDLE.SSMENU 7953 . 9432) (LIST.STRINGS 9434 . 9753) (PRINTABLEP
+ 9755 . 10378) (REPAINT.SSWINDOW 10380 . 11096) (RESHAPE.SSWINDOW 11098 . 12282) (SSCMD.EXIT 12284 . 
+12516) (SSCMD.MINLEN 12518 . 14005) (SSCMD.RESET 14007 . 14352) (SSCMD.SORT 14354 . 15023) (STRINGS 
+15025 . 16265) (STRINGSCOPE 16267 . 17435)) (17593 18519 (WITH.INPUT.FILE 17593 . 18519)))))
 STOP
