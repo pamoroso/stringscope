@@ -44,7 +44,7 @@ where `FILENAME` is a file name and `MIN.LEN` the optional minimum length printa
 `STRINGSCOPE` prompts to create a window to display the output, which is scrollable. The output window has a prompt area attached to the top side and a menu to the right side. The prompt area serves for requesting input and displaying status messages, the menu contains the following items and subitems:
 
 - `Get`: reads the strings of a new file
-- `Find`: searches for strings matching a specific text
+- `Find`: searches for strings matching a specified text (case insensitive)
 - `Sort`: sorts the strings in the following order
   * `Ascending`
   * `Descending`
