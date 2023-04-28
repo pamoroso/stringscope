@@ -7,7 +7,19 @@ Stringscope is a tool to display a list of text the strings contained in a binar
 
 ## Installation
 
-Download the file `STRINGSCOPE` from the project repo, copy it to a file system your Medley Interlisp installation has access to, and evaluate the following expression from the Lisp executive:
+Download the file `STRINGSCOPE` from the project repo, copy it to a file system location your Medley Interlisp installation has access to, and optionally compile the source by evaluating the following expression from the Lisp executive:
+
+```
+(TCOMPL 'STRINGSCOPE)
+```
+
+Provide these answers to the questions the compiler asks:
+
+* listing? no
+* redefine? yes
+* save exprs? no
+
+Finally, to load the program evaluate:
 
 ```lisp
 (FILESLOAD STRINGSCOPE)
