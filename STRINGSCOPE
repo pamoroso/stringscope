@@ -1,21 +1,21 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "28-Apr-2023 07:55:08" {DSK}<home>medley>il>STRINGSCOPE.;52 18973  
+(FILECREATED "28-Apr-2023 11:07:46" {DSK}<home>medley>il>STRINGSCOPE.;53 19972  
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (VARS STRINGSCOPECOMS)
-                  (FNS SET.SSCWIN.TITLE)
+      :CHANGES-TO (FNS HANDLE.SSMENU SSCMD.GET)
+                  (VARS STRINGSCOPECOMS)
 
-      :PREVIOUS-DATE "28-Apr-2023 06:08:59" {DSK}<home>medley>il>STRINGSCOPE.;51)
+      :PREVIOUS-DATE "28-Apr-2023 07:55:08" {DSK}<home>medley>il>STRINGSCOPE.;52)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
 
 (RPAQQ STRINGSCOPECOMS
        ((FNS APPEND.CHAR ATLEASTNCHRSP CREATE.SSWINDOW EXTRACT.STRINGS HANDLE.SSMENU LIST.STRINGS 
-             PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW SET.SSCWIN.TITLE SSCMD.EXIT SSCMD.MINLEN 
-             SSCMD.RESET SSCMD.SORT STRINGS STRINGSCOPE)
+             PRINTABLEP REPAINT.SSWINDOW RESHAPE.SSWINDOW SET.SSCWIN.TITLE SSCMD.EXIT SSCMD.GET 
+             SSCMD.MINLEN SSCMD.RESET SSCMD.SORT STRINGS STRINGSCOPE)
         (VARS)
         (INITVARS (SSCOPE.MIN.LEN 4))
         (COMMANDS STRINGS)
@@ -132,7 +132,7 @@
           (RETURN (DREVERSE STRINGS])
 
 (HANDLE.SSMENU
-  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited 27-Apr-2023 10:57 by PA")
+  [LAMBDA (ITEM MENU KEY)                                    (* ; "Edited 28-Apr-2023 11:03 by PA")
                                                              (* ; "Edited 22-Apr-2023 11:41 by PA")
                                                              (* ; "Edited 21-Apr-2023 11:12 by PA")
                                                              (* ; "Edited 20-Apr-2023 10:11 by PA")
@@ -145,18 +145,18 @@
            (MAIN.WINDOW (MAINWINDOW WINDOW T)))
           (if (OR (EQ KEY 'MIDDLE)
                   (EQ KEY 'RIGHT))
-              then (RETURN NIL))
-          (SELECTQ (CADR ITEM)
-              (GET (PROMPTPRINT ITEM))
-              (FIND (PROMPTPRINT ITEM))
-              (SORT (SSCMD.SORT MAIN.WINDOW))
-              (ASCENDING (SSCMD.SORT MAIN.WINDOW))
-              (DESCENDING [SSCMD.SORT MAIN.WINDOW (FUNCTION (LAMBDA (S1 S2)
-                                                              (ALPHORDER S2 S1])
-              (MINLEN (SSCMD.MINLEN MAIN.WINDOW))
-              (RESET (SSCMD.RESET MAIN.WINDOW))
-              (EXIT (SSCMD.EXIT MAIN.WINDOW))
-              (T (PROMPTPRINT "Unknown menu option"])
+              then NIL
+            else (SELECTQ (CADR ITEM)
+                     (GET (SSCMD.GET MAIN.WINDOW))
+                     (FIND (PROMPTPRINT ITEM))
+                     (SORT (SSCMD.SORT MAIN.WINDOW))
+                     (ASCENDING (SSCMD.SORT MAIN.WINDOW))
+                     (DESCENDING [SSCMD.SORT MAIN.WINDOW (FUNCTION (LAMBDA (S1 S2)
+                                                                     (ALPHORDER S2 S1])
+                     (MINLEN (SSCMD.MINLEN MAIN.WINDOW))
+                     (RESET (SSCMD.RESET MAIN.WINDOW))
+                     (EXIT (SSCMD.EXIT MAIN.WINDOW))
+                     (T (PROMPTPRINT "Unknown menu option"])
 
 (LIST.STRINGS
   [LAMBDA (STRINGS STREAM)                                   (* ; "Edited 22-Jan-2023 10:29 by PA")
@@ -222,6 +222,24 @@
   [LAMBDA (WINDOW)                                           (* ; "Edited 22-Apr-2023 11:40 by PA")
                                                              (* Quits the program.)
     (CLOSEW WINDOW])
+
+(SSCMD.GET
+  [LAMBDA (WINDOW)                                           (* ; "Edited 28-Apr-2023 11:00 by PA")
+
+         (* Prompt the user for a file name, extract the strings from the filem and 
+         refresh the view.)
+
+    (LET* [(STREAM (WINDOWPROP WINDOW 'PROMPTAREA))
+           (FILENAME (PROGN (TERPRI STREAM)
+                            (PROMPTFORWORD "File name:" NIL NIL STREAM)))
+           (STRINGS (WITH.INPUT.FILE (STR FILENAME)
+                           (EXTRACT.STRINGS STR (WINDOWPROP WINDOW 'MIN.LEN]
+          (if STRINGS
+              then (WINDOWPROP WINDOW 'FILE FILENAME)
+                   (WINDOWPROP WINDOW 'STRINGS STRINGS)
+                   (WINDOWPROP WINDOW 'STRINGS.CACHE STRINGS)
+                   (RESHAPE.SSWINDOW WINDOW)
+            else (PRINTOUT STREAM T "No srings in" %, FILENAME %, "or can't open file"])
 
 (SSCMD.MINLEN
   [LAMBDA (WINDOW)                                           (* ; "Edited 28-Apr-2023 06:06 by PA")
@@ -326,10 +344,10 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (784 17868 (APPEND.CHAR 794 . 1051) (ATLEASTNCHRSP 1053 . 1676) (CREATE.SSWINDOW 1678 . 
-5429) (EXTRACT.STRINGS 5431 . 7951) (HANDLE.SSMENU 7953 . 9432) (LIST.STRINGS 9434 . 9753) (PRINTABLEP
- 9755 . 10378) (REPAINT.SSWINDOW 10380 . 11096) (RESHAPE.SSWINDOW 11098 . 12282) (SET.SSCWIN.TITLE 
-12284 . 12929) (SSCMD.EXIT 12931 . 13163) (SSCMD.MINLEN 13165 . 14436) (SSCMD.RESET 14438 . 14783) (
-SSCMD.SORT 14785 . 15454) (STRINGS 15456 . 16696) (STRINGSCOPE 16698 . 17866)) (18024 18950 (
-WITH.INPUT.FILE 18024 . 18950)))))
+  (FILEMAP (NIL (801 18867 (APPEND.CHAR 811 . 1068) (ATLEASTNCHRSP 1070 . 1693) (CREATE.SSWINDOW 1695 . 
+5446) (EXTRACT.STRINGS 5448 . 7968) (HANDLE.SSMENU 7970 . 9529) (LIST.STRINGS 9531 . 9850) (PRINTABLEP
+ 9852 . 10475) (REPAINT.SSWINDOW 10477 . 11193) (RESHAPE.SSWINDOW 11195 . 12379) (SET.SSCWIN.TITLE 
+12381 . 13026) (SSCMD.EXIT 13028 . 13260) (SSCMD.GET 13262 . 14162) (SSCMD.MINLEN 14164 . 15435) (
+SSCMD.RESET 15437 . 15782) (SSCMD.SORT 15784 . 16453) (STRINGS 16455 . 17695) (STRINGSCOPE 17697 . 
+18865)) (19023 19949 (WITH.INPUT.FILE 19023 . 19949)))))
 STOP
