@@ -1,13 +1,12 @@
 (DEFINE-FILE-INFO PACKAGE "INTERLISP" READTABLE "INTERLISP" BASE 10)
 
-(FILECREATED "29-Apr-2023 09:12:33" {DSK}<home>medley>il>STRINGSCOPE.;54 22593  
+(FILECREATED "29-Apr-2023 10:41:18" {DSK}<home>medley>il>STRINGSCOPE.;55 22286  
 
       :EDIT-BY "PA"
 
-      :CHANGES-TO (FNS CREATE.SSWINDOW HANDLE.SSMENU SSCMD.INFO SSCMD.FIND)
-                  (VARS STRINGSCOPECOMS)
+      :CHANGES-TO (FNS STRINGS)
 
-      :PREVIOUS-DATE "28-Apr-2023 11:07:46" {DSK}<home>medley>il>STRINGSCOPE.;53)
+      :PREVIOUS-DATE "29-Apr-2023 09:12:33" {DSK}<home>medley>il>STRINGSCOPE.;54)
 
 
 (PRETTYCOMPRINT STRINGSCOPECOMS)
@@ -324,25 +323,19 @@
     (RESHAPE.SSWINDOW WINDOW])
 
 (STRINGS
-  [LAMBDA (FILE MIN.LENGTH NEWWIN)                           (* ; "Edited 18-Feb-2023 10:21 by PA")
+  [LAMBDA (FILE MIN.LENGTH NEWWIN)                           (* ; "Edited 29-Apr-2023 10:39 by PA")
+                                                             (* ; "Edited 18-Feb-2023 10:21 by PA")
                                                              (* ; "Edited 17-Feb-2023 09:05 by PA")
                                                              (* ; "Edited 12-Feb-2023 10:48 by PA")
-
-         (* Lists the printable strings in binary file FILE in a new window if NEWWIN is 
-         T, otherwise prints them to the primary output #.(SEDIT::MAKE-BROKEN-ATOM ".") 
-         The strings must be at least MIN.LENGTH characters in length.
-         Depending on NEWWIN returns the primary output stream or the new window if the 
-         file is processed with no issues, NIL otherwise.)
-
-    (LET [(STRINGS (WITH.INPUT.FILE (STREAM FILE)
-                          (EXTRACT.STRINGS STREAM MIN.LENGTH]
-         (if STRINGS
-             then (if NEWWIN
-                      then (CREATE.SSWINDOW FILE STRINGS (OR MIN.LENGTH SSCOPE.MIN.LEN))
-                    else (LIST.STRINGS STRINGS)
-                         (OUTPUT))
-           else (PROMPTPRINT (CONCAT "No strings in " FILE " or can't open file."))
-                NIL])
+    (AND FILE (LET [(STRINGS (WITH.INPUT.FILE (STREAM FILE)
+                                    (EXTRACT.STRINGS STREAM MIN.LENGTH]
+                   (if STRINGS
+                       then (if NEWWIN
+                                then (CREATE.SSWINDOW FILE STRINGS (OR MIN.LENGTH SSCOPE.MIN.LEN))
+                              else (LIST.STRINGS STRINGS)
+                                   (OUTPUT))
+                     else (PROMPTPRINT (CONCAT "No strings in " FILE " or can't open file."))
+                          NIL])
 
 (STRINGSCOPE
   [LAMBDA (FILE MIN.LENGTH)                                  (* ; "Edited 18-Feb-2023 10:17 by PA")
@@ -382,11 +375,11 @@
                    (RETURN ,VALUE)
             else (RETURN NIL))))
 (DECLARE%: DONTCOPY
-  (FILEMAP (NIL (851 21488 (APPEND.CHAR 861 . 1118) (ATLEASTNCHRSP 1120 . 1743) (CREATE.SSWINDOW 1745 . 
-5991) (EXTRACT.STRINGS 5993 . 8513) (HANDLE.SSMENU 8515 . 10141) (LIST.STRINGS 10143 . 10462) (
-PRINTABLEP 10464 . 11087) (REPAINT.SSWINDOW 11089 . 11805) (RESHAPE.SSWINDOW 11807 . 12991) (
-SET.SSCWIN.TITLE 12993 . 13638) (SSCMD.EXIT 13640 . 13872) (SSCMD.FIND 13874 . 15037) (SSCMD.GET 15039
- . 15939) (SSCMD.INFO 15941 . 16783) (SSCMD.MINLEN 16785 . 18056) (SSCMD.RESET 18058 . 18403) (
-SSCMD.SORT 18405 . 19074) (STRINGS 19076 . 20316) (STRINGSCOPE 20318 . 21486)) (21644 22570 (
-WITH.INPUT.FILE 21644 . 22570)))))
+  (FILEMAP (NIL (766 21181 (APPEND.CHAR 776 . 1033) (ATLEASTNCHRSP 1035 . 1658) (CREATE.SSWINDOW 1660 . 
+5906) (EXTRACT.STRINGS 5908 . 8428) (HANDLE.SSMENU 8430 . 10056) (LIST.STRINGS 10058 . 10377) (
+PRINTABLEP 10379 . 11002) (REPAINT.SSWINDOW 11004 . 11720) (RESHAPE.SSWINDOW 11722 . 12906) (
+SET.SSCWIN.TITLE 12908 . 13553) (SSCMD.EXIT 13555 . 13787) (SSCMD.FIND 13789 . 14952) (SSCMD.GET 14954
+ . 15854) (SSCMD.INFO 15856 . 16698) (SSCMD.MINLEN 16700 . 17971) (SSCMD.RESET 17973 . 18318) (
+SSCMD.SORT 18320 . 18989) (STRINGS 18991 . 20009) (STRINGSCOPE 20011 . 21179)) (21337 22263 (
+WITH.INPUT.FILE 21337 . 22263)))))
 STOP
