@@ -1,6 +1,6 @@
 # Stringscope
 
-Stringscope is a tool to display a list of text the strings contained in a binary file, i.e. the sequences of printable characters longer than a minimum threshold of 4 characters. The program, which is written in and runs under [Medley Interlisp](https://interlisp.org), is similar to the Unix tool `strings`.
+Stringscope is a tool to display a list of the text strings contained in a binary file, i.e. the sequences of printable characters longer than a minimum threshold of 4 characters. The program, which is written in and runs under [Medley Interlisp](https://interlisp.org), is similar to the Unix tool `strings`.
 
 ![Stringscope output window](https://raw.githubusercontent.com/pamoroso/stringscope/main/stringscope.png)
 
